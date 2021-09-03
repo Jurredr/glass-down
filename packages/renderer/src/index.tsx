@@ -1,7 +1,9 @@
-import {createApp} from 'vue';
-import App from '/@/App.vue';
-import router from '/@/router';
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import './index.css'
+import App from './app'
 
-createApp(App)
-  .use(router)
-  .mount('#app');
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
