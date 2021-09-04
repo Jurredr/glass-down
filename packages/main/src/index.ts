@@ -9,22 +9,8 @@ if (!isSingleInstance) {
   process.exit(0)
 }
 
+// Disable hardware acceleration
 app.disableHardwareAcceleration()
-
-// Install "Vue.js devtools"
-if (import.meta.env.MODE === 'development') {
-  app
-    .whenReady()
-    .then(() => import('electron-devtools-installer'))
-    .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-      installExtension(VUEJS3_DEVTOOLS, {
-        loadExtensionOptions: {
-          allowFileAccess: true
-        }
-      })
-    )
-    .catch((e) => console.error('Failed install extension:', e))
-}
 
 let mainWindow: BrowserWindow | null = null
 
@@ -50,9 +36,10 @@ const createWindow = async () => {
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show()
 
-    if (import.meta.env.MODE === 'development') {
-      mainWindow?.webContents.openDevTools()
-    }
+    // Open devTools on start
+    // if (import.meta.env.MODE === 'development') {
+    //   mainWindow?.webContents.openDevTools()
+    // }
   })
 
   /**
