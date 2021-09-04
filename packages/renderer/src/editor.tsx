@@ -25,9 +25,7 @@ const Editor: React.FC<Props> = (props) => {
   }, [editorView])
 
   return (
-    <div className="editor-wrapper" ref={refContainer}>
-      Editor
-    </div>
+    <div className="editor-wrapper" ref={refContainer} />
   )
 }
 

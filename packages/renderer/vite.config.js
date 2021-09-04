@@ -39,7 +39,7 @@ const config = {
     },
     rollupOptions: {
       external: [
-        ...builtinModules,
+        ...builtinModules.filter(m => m !== 'process' && m !== 'assert'),
       ],
     },
     emptyOutDir: true,
