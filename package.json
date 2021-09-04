@@ -1,6 +1,16 @@
 {
   "name": "glass-down",
   "private": true,
+  "keywords": [
+    "Glassdown",
+    "Markdown",
+    "React",
+    "Electron",
+    "Vite",
+    "TypeScript"
+  ],
+  "author": "Jurredr",
+  "license": "MIT",
   "engines": {
     "node": ">=v14.16",
     "npm": ">=7.7"
