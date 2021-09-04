@@ -9,10 +9,11 @@ const App: React.FC = () => {
   const handleDocChange = useCallback((newDoc) => {
     setDoc(newDoc)
   }, [])
+
   return (
     <div className="app">
       <Editor onChange={handleDocChange} initialDoc={doc} />
-      <Preview />
+      <Preview doc={doc} />
     </div>
   )
 }
