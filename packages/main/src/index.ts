@@ -1,5 +1,6 @@
 import { app, BrowserWindow, nativeImage } from 'electron'
 import { join } from 'path'
+import { platform } from 'process'
 import { URL } from 'url'
 
 const isSingleInstance = app.requestSingleInstanceLock()
@@ -15,12 +16,17 @@ app.disableHardwareAcceleration()
 let mainWindow: BrowserWindow | null = null
 
 const createWindow = async () => {
+  const iconPath =
+    platform === 'darwin'
+      ? join(__dirname, '../../../buildResources/icon.icns')
+      : join(__dirname, '../../../buildResources/icon.png')
+
   mainWindow = new BrowserWindow({
     show: false, // Use 'ready-to-show' event to show window
     vibrancy: 'under-window',
     visualEffectState: 'active',
     titleBarStyle: 'hiddenInset',
-    icon: join(__dirname, '../../../buildResources/icon.png'),
+    icon: iconPath,
     webPreferences: {
       nativeWindowOpen: true,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
@@ -29,10 +35,11 @@ const createWindow = async () => {
     }
   })
 
+  // Set mac dock image
   const image = nativeImage.createFromPath(
     join(__dirname, '../../../buildResources/icon.png')
-  );
-  app.dock.setIcon(image);
+  )
+  app.dock.setIcon(image)
 
   /**
    * If you install `show: true` then it can cause issues when trying to close the window.
