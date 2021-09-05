@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, nativeImage } from 'electron'
 import { join } from 'path'
 import { URL } from 'url'
 
@@ -19,6 +19,8 @@ const createWindow = async () => {
     show: false, // Use 'ready-to-show' event to show window
     vibrancy: 'under-window',
     visualEffectState: 'active',
+    titleBarStyle: 'hiddenInset',
+    icon: join(__dirname, '../../../buildResources/icon.png'),
     webPreferences: {
       nativeWindowOpen: true,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
@@ -26,6 +28,11 @@ const createWindow = async () => {
       enableRemoteModule: import.meta.env.MODE === 'test' // Spectron tests can't work with enableRemoteModule: false
     }
   })
+
+  const image = nativeImage.createFromPath(
+    join(__dirname, '../../../buildResources/icon.png')
+  );
+  app.dock.setIcon(image);
 
   /**
    * If you install `show: true` then it can cause issues when trying to close the window.
