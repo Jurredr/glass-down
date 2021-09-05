@@ -65,15 +65,13 @@ app.on('second-instance', () => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  app.quit()
 })
 
 app
   .whenReady()
   .then(createWindow)
-  .catch((e) => console.error('Failed create window:', e))
+  .catch((e) => console.error('Failed to create window:', e))
 
 // Auto-updates
 if (import.meta.env.PROD) {
