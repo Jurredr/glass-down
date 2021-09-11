@@ -9,7 +9,7 @@ const FileName: React.FC = () => {
 
   return (
     <div className="file-name-section">
-      <p>{fileName}{unsaved ? '*' : ''}</p>
+      <p>Glassdown - {fileName}{unsaved ? '*' : ''}</p>
     </div>
   )
 }
