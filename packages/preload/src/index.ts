@@ -32,7 +32,7 @@ if (process.contextIsolated) {
       }
     },
     receive: (channel: string, func: (event: string, message: string) => void) => {
-      const validChannels = ['document-saved']
+      const validChannels = ['document-saved', 'document-opened']
       if (validChannels.includes(channel)) {
         ipcRenderer.on(channel, (event, ...args) => func(args[0], args[1]))
       }

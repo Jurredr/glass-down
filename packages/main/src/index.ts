@@ -7,6 +7,7 @@ import fs from 'fs'
 
 const isSingleInstance = app.requestSingleInstanceLock()
 const isMac = process.platform === 'darwin'
+let currentSaveDir: string | null = null
 
 if (!isSingleInstance) {
   app.quit()
@@ -88,8 +89,19 @@ const createWindow = async () => {
           click: () => {
             if (mainWindow) {
               dialog.showOpenDialog(mainWindow, {}).then(({ filePaths }) => {
-                console.log(filePaths[0])
-                mainWindow?.webContents.send('document-opened', filePaths[0])
+                const filePath = filePaths[0]
+                fs.readFile(filePath, 'utf8', (error, content) => {
+                  if (error) {
+                    console.log(error)
+                  } else {
+                    currentSaveDir = filePath
+                    mainWindow?.webContents.send(
+                      'document-opened',
+                      filePath,
+                      content
+                    )
+                  }
+                })
               })
             }
           }
@@ -110,7 +122,42 @@ const createWindow = async () => {
         {
           label: 'Save',
           accelerator: 'CmdOrCtrl+S',
-          click: () => console.log('save')
+          click: () => {
+            if (mainWindow) {
+              if (currentSaveDir) {
+                fs.writeFile(currentSaveDir, '', (error) => {
+                  if (error) {
+                    console.log(error)
+                  } else {
+                    mainWindow?.webContents.send(
+                      'document-saved',
+                      currentSaveDir
+                    )
+                  }
+                })
+              } else {
+                dialog
+                  .showSaveDialog(mainWindow, {
+                    filters: [{ name: 'Markdown files', extensions: ['md'] }]
+                  })
+                  .then(({ filePath }) => {
+                    if (filePath) {
+                      currentSaveDir = filePath
+                      fs.writeFile(filePath, '', (error) => {
+                        if (error) {
+                          console.log(error)
+                        } else {
+                          mainWindow?.webContents.send(
+                            'document-saved',
+                            filePath
+                          )
+                        }
+                      })
+                    }
+                  })
+              }
+            }
+          }
         },
         {
           label: 'Save As',
@@ -122,8 +169,8 @@ const createWindow = async () => {
                   filters: [{ name: 'Markdown files', extensions: ['md'] }]
                 })
                 .then(({ filePath }) => {
-                  console.log(filePath)
                   if (filePath) {
+                    currentSaveDir = filePath
                     fs.writeFile(filePath, '', (error) => {
                       if (error) {
                         console.log(error)
