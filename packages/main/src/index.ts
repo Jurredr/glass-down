@@ -3,6 +3,7 @@ import { dialog } from 'electron'
 import { app, BrowserWindow, Menu, nativeImage, shell } from 'electron'
 import * as path from 'path'
 import { URL } from 'url'
+import fs from 'fs'
 
 const isSingleInstance = app.requestSingleInstanceLock()
 const isMac = process.platform === 'darwin'
@@ -50,7 +51,7 @@ const createWindow = async () => {
               { type: 'separator' },
               {
                 label: 'Preferences',
-                accelerator: "CmdOrCtrl+,",
+                accelerator: 'CmdOrCtrl+,',
                 click: () => console.log('test')
               },
               { type: 'separator' },
@@ -70,12 +71,12 @@ const createWindow = async () => {
       submenu: [
         {
           label: 'New File',
-          accelerator: "CmdOrCtrl+N",
+          accelerator: 'CmdOrCtrl+N',
           click: () => console.log('test')
         },
         {
           label: 'New Window',
-          accelerator: "CmdOrCtrl+Shift+N",
+          accelerator: 'CmdOrCtrl+Shift+N',
           click: () => console.log('test')
         },
         {
@@ -83,8 +84,15 @@ const createWindow = async () => {
         },
         {
           label: 'Open',
-          accelerator: "CmdOrCtrl+O",
-          click: () => console.log('test')
+          accelerator: 'CmdOrCtrl+O',
+          click: () => {
+            if (mainWindow) {
+              dialog.showOpenDialog(mainWindow, {}).then(({ filePaths }) => {
+                console.log(filePaths[0])
+                mainWindow?.webContents.send('document-opened', filePaths[0])
+              })
+            }
+          }
         },
         {
           label: 'Open Recent',
@@ -101,17 +109,32 @@ const createWindow = async () => {
         },
         {
           label: 'Save',
-          accelerator: "CmdOrCtrl+S",
+          accelerator: 'CmdOrCtrl+S',
           click: () => console.log('save')
         },
         {
           label: 'Save As',
-          accelerator: "CmdOrCtrl+Shift+S",
-          click: () => dialog.showSaveDialog(
-            {
-              defaultPath: path.resolve(app.getPath("desktop"), path.basename('http://www.example.com/path/to/file.jpg'))
+          accelerator: 'CmdOrCtrl+Shift+S',
+          click: () => {
+            if (mainWindow) {
+              dialog
+                .showSaveDialog(mainWindow, {
+                  filters: [{ name: 'Markdown files', extensions: ['md'] }]
+                })
+                .then(({ filePath }) => {
+                  console.log(filePath)
+                  if (filePath) {
+                    fs.writeFile(filePath, '', (error) => {
+                      if (error) {
+                        console.log(error)
+                      } else {
+                        mainWindow?.webContents.send('document-saved', filePath)
+                      }
+                    })
+                  }
+                })
             }
-          )
+          }
         }
       ] as MenuItemConstructorOptions[]
     },
