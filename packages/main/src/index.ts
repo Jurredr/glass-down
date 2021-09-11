@@ -26,7 +26,9 @@ const createWindow = async () => {
     show: false, // Use 'ready-to-show' event to show window
     vibrancy: 'under-window',
     visualEffectState: 'active',
-    // titleBarStyle: 'hiddenInset',
+    frame: false,
+    transparent: true,
+    titleBarStyle: 'hiddenInset',
     icon: iconPath,
     webPreferences: {
       nativeWindowOpen: true,

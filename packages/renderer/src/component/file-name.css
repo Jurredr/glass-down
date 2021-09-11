@@ -1,4 +1,14 @@
 .file-name-section {
-  background-color: thistle;
-  height: 3rem;
+  background-color: #282c34;
+  height: 2.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-name-section > p {
+  font-size: 0.8rem;
+  color: aliceblue;
+  text-align: center;
 }
