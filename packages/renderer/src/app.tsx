@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react'
-import Editor from './editor'
-import Preview from './preview'
+import Editor from './component/editor'
+import Preview from './component/preview'
 import './app.css'
+import FileName from './component/file-name'
 
 const App: React.FC = () => {
   const [doc, setDoc] = useState<string>('# Hello, World!\n')
@@ -12,8 +13,11 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <Editor onChange={handleDocChange} initialDoc={doc} />
-      <Preview doc={doc} />
+      <FileName />
+      <div className="app-content">
+        <Editor onChange={handleDocChange} initialDoc={doc} />
+        <Preview doc={doc} />
+      </div>
     </div>
   )
 }
