@@ -1,4 +1,4 @@
-import type { MenuItemConstructorOptions } from 'electron';
+import type { MenuItemConstructorOptions } from 'electron'
 import { dialog } from 'electron'
 import { app, BrowserWindow, Menu, nativeImage, shell } from 'electron'
 import * as path from 'path'
@@ -48,6 +48,12 @@ const createWindow = async () => {
             submenu: [
               { role: 'about' },
               { type: 'separator' },
+              {
+                label: 'Preferences',
+                accelerator: "CmdOrCtrl+,",
+                click: () => console.log('test')
+              },
+              { type: 'separator' },
               { role: 'services' },
               { type: 'separator' },
               { role: 'hide' },
@@ -74,6 +80,11 @@ const createWindow = async () => {
         },
         {
           type: 'separator'
+        },
+        {
+          label: 'Open',
+          accelerator: "CmdOrCtrl+O",
+          click: () => console.log('test')
         },
         {
           label: 'Open Recent',
