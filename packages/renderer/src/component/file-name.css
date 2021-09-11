@@ -1,10 +1,17 @@
 .file-name-section {
-  background-color: #282c34;
+  /* background-color: #282c34; */
+  background-color: rgba(36, 38, 43, 0.4);
   height: 2.5rem;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-app-region: drag;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
 }
 
 .file-name-section > p {

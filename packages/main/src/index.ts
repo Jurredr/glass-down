@@ -26,9 +26,10 @@ const createWindow = async () => {
     show: false, // Use 'ready-to-show' event to show window
     vibrancy: 'under-window',
     visualEffectState: 'active',
+    titleBarStyle: 'hiddenInset',
     frame: false,
     transparent: true,
-    titleBarStyle: 'hiddenInset',
+    roundedCorners: true,
     icon: iconPath,
     webPreferences: {
       nativeWindowOpen: true,
@@ -177,9 +178,9 @@ const createWindow = async () => {
     mainWindow?.show()
 
     // Open devTools on start
-    // if (import.meta.env.MODE === 'development') {
-    //   mainWindow?.webContents.openDevTools()
-    // }
+    if (import.meta.env.MODE === 'development') {
+      mainWindow?.webContents.openDevTools()
+    }
   })
 
   /**

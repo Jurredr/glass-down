@@ -1,7 +1,7 @@
 .editor-wrapper {
   height: 100%;
   flex: 0 0 49%;
-  border-right: 1px solid #282a30;
+  border-right: 2px solid rgba(36, 38, 43, 0.4);
 }
 
 .editor-wrapper > .cm-focused {
@@ -10,4 +10,8 @@
 
 .editor-wrapper > .cm-editor > .cm-scroller > .cm-content > .cm-activeLine {
   background-color: rgba(44, 49, 58, 0.2) !important;
+}
+
+.editor-wrapper > .cm-editor > .cm-scroller > .cm-gutters {
+  background-color: rgba(36, 38, 43, 0.3) !important;
 }
