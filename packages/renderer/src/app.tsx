@@ -11,12 +11,15 @@ const App: React.FC = () => {
   const [fileName, setFileName] = useState<string>('Untitled file')
   const [saved, setSaved] = useState<boolean>(false)
 
-  const handleDocChange = useCallback((newDoc: string) => {
-    if (currentSavedDoc !== newDoc) {
-      setSaved(false)
-      setDoc(newDoc)
-    }
-  }, [currentSavedDoc])
+  const handleDocChange = useCallback(
+    (newDoc: string) => {
+      if (currentSavedDoc !== newDoc) {
+        setSaved(false)
+        setDoc(newDoc)
+      }
+    },
+    [currentSavedDoc]
+  )
 
   // Document saved
   useEffect(() => {
