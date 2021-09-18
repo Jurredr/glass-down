@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  [⚡️] Modern & Fast transparant Markdown editor (ReactJS + Electron)
+  [⚡️] Modern & Fast transparant Markdown editor. (ReactJS + Electron)
 </p>
 
 # Preview
