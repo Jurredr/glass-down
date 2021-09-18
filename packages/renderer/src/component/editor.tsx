@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import useCodeMirror from '../util/use-codemirror'
 import './editor.css'
 
@@ -9,13 +9,9 @@ interface Props {
 
 const Editor: React.FC<Props> = (props) => {
   const { onChange, initialDoc } = props
-  const handleChange = useCallback(
-    (state) => onChange(state.doc.toString()),
-    [onChange]
-  )
   const [refContainer] = useCodeMirror<HTMLDivElement>({
     initialDoc: initialDoc,
-    onChange: handleChange
+    onChange: (state) => onChange(state.doc.toString())
   })
 
   return <div className="editor-wrapper" ref={refContainer} />

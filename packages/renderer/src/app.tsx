@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Editor from './component/editor'
 import Preview from './component/preview'
 import './app.css'
@@ -10,29 +10,41 @@ const App: React.FC = () => {
   const [currentSavedDoc, setCurrentSavedDoc] = useState<string | null>(null)
   const [fileName, setFileName] = useState<string>('Untitled file')
   const [saved, setSaved] = useState<boolean>(false)
+  const [updateSaveDoc, setUpdateSaveDoc] = useState<boolean>(false)
 
-  const handleDocChange = useCallback(
-    (newDoc: string) => {
-      if (currentSavedDoc !== newDoc) {
-        setSaved(false)
-        setDoc(newDoc)
-        ;(window as unknown as ipcWindow).ipcRenderer.send(
-          'document-updated',
-          newDoc
-        )
-      }
-    },
-    [currentSavedDoc]
-  )
+  useEffect(() => {
+    if (updateSaveDoc) {
+      setCurrentSavedDoc(doc)
+      setUpdateSaveDoc(false)
+    }
+  }, [saved, doc, updateSaveDoc])
+
+  useEffect(() => {
+    if (currentSavedDoc !== doc) {
+      setSaved(false)
+    } else {
+      setSaved(true)
+    }
+  }, [currentSavedDoc, doc])
+
+  const handleDocChange = (newDoc: string) => {
+    if (currentSavedDoc !== newDoc) {
+      setDoc(newDoc)
+      ;(window as unknown as ipcWindow).ipcRenderer.send(
+        'document-updated',
+        newDoc
+      )
+    }
+  }
 
   // Document saved
   useEffect(() => {
     ;(window as unknown as ipcWindow).ipcRenderer.receive(
       'document-saved',
       (filePath: string) => {
-        setCurrentSavedDoc(doc)
         setFileName(filePath)
         setSaved(true)
+        setUpdateSaveDoc(true)
       }
     )
   }, [])

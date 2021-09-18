@@ -1,5 +1,5 @@
-import { ipcMain, MenuItemConstructorOptions } from 'electron'
-import { ipcRenderer } from 'electron'
+import type { MenuItemConstructorOptions } from 'electron';
+import { ipcMain } from 'electron'
 import { dialog } from 'electron'
 import { app, BrowserWindow, Menu, nativeImage, shell } from 'electron'
 import * as path from 'path'
@@ -267,9 +267,9 @@ const createWindow = async () => {
     mainWindow?.show()
 
     // Open devTools on start
-    // if (import.meta.env.MODE === 'development') {
-    //   mainWindow?.webContents.openDevTools()
-    // }
+    if (import.meta.env.MODE === 'development') {
+      mainWindow?.webContents.openDevTools()
+    }
   })
 
   /**
