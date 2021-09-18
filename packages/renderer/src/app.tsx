@@ -3,7 +3,7 @@ import Editor from './component/editor'
 import Preview from './component/preview'
 import './app.css'
 import FileName from './component/file-name'
-import type ipcWindow from './types/IpcTypes'
+import type ipcWindow from '../../../types/IpcTypes'
 
 const App: React.FC = () => {
   const [doc, setDoc] = useState<string>('# Hello, World!\n')
@@ -16,6 +16,10 @@ const App: React.FC = () => {
       if (currentSavedDoc !== newDoc) {
         setSaved(false)
         setDoc(newDoc)
+        ;(window as unknown as ipcWindow).ipcRenderer.send(
+          'document-updated',
+          newDoc
+        )
       }
     },
     [currentSavedDoc]

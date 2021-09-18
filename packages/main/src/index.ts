@@ -1,4 +1,5 @@
-import type { MenuItemConstructorOptions } from 'electron'
+import { ipcMain, MenuItemConstructorOptions } from 'electron'
+import { ipcRenderer } from 'electron'
 import { dialog } from 'electron'
 import { app, BrowserWindow, Menu, nativeImage, shell } from 'electron'
 import * as path from 'path'
@@ -7,7 +8,9 @@ import fs from 'fs'
 
 const isSingleInstance = app.requestSingleInstanceLock()
 const isMac = process.platform === 'darwin'
+
 let currentSaveDir: string | null = null
+let currentFileContent = ''
 
 if (!isSingleInstance) {
   app.quit()
@@ -39,6 +42,11 @@ const createWindow = async () => {
       contextIsolation: import.meta.env.MODE !== 'test', // Spectron tests can't work with contextIsolation: true
       enableRemoteModule: import.meta.env.MODE === 'test' // Spectron tests can't work with enableRemoteModule: false
     }
+  })
+
+  // IPC
+  ipcMain.on('document-updated', (_, doc) => {
+    currentFileContent = doc
   })
 
   // Set menu
@@ -125,7 +133,7 @@ const createWindow = async () => {
           click: () => {
             if (mainWindow) {
               if (currentSaveDir) {
-                fs.writeFile(currentSaveDir, '', (error) => {
+                fs.writeFile(currentSaveDir, currentFileContent, (error) => {
                   if (error) {
                     console.log(error)
                   } else {
@@ -143,7 +151,7 @@ const createWindow = async () => {
                   .then(({ filePath }) => {
                     if (filePath) {
                       currentSaveDir = filePath
-                      fs.writeFile(filePath, '', (error) => {
+                      fs.writeFile(filePath, currentFileContent, (error) => {
                         if (error) {
                           console.log(error)
                         } else {
@@ -171,7 +179,7 @@ const createWindow = async () => {
                 .then(({ filePath }) => {
                   if (filePath) {
                     currentSaveDir = filePath
-                    fs.writeFile(filePath, '', (error) => {
+                    fs.writeFile(filePath, currentFileContent, (error) => {
                       if (error) {
                         console.log(error)
                       } else {

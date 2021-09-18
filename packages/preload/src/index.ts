@@ -26,13 +26,13 @@ if (process.contextIsolated) {
 
   contextBridge.exposeInMainWorld('ipcRenderer', {
     send: (channel: string, data: string) => {
-      const validChannels = ['toMain']
+      const validChannels = ['document-updated']
       if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, data)
       }
     },
     receive: (channel: string, func: (event: string, message: string) => void) => {
-      const validChannels = ['document-saved', 'document-opened']
+      const validChannels = ['document-saved', 'document-opened', 'document-updated']
       if (validChannels.includes(channel)) {
         ipcRenderer.on(channel, (event, ...args) => func(args[0], args[1]))
       }
