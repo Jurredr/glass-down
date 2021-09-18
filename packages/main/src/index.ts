@@ -259,9 +259,9 @@ const createWindow = async () => {
     mainWindow?.show()
 
     // Open devTools on start
-    // if (import.meta.env.MODE === 'development') {
-    //   mainWindow?.webContents.openDevTools()
-    // }
+    if (import.meta.env.MODE === 'development') {
+      mainWindow?.webContents.openDevTools()
+    }
   })
 
   /**

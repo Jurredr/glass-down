@@ -7,23 +7,25 @@ import type ipcWindow from './types/IpcTypes'
 
 const App: React.FC = () => {
   const [doc, setDoc] = useState<string>('# Hello, World!\n')
+  const [currentSavedDoc, setCurrentSavedDoc] = useState<string | null>(null)
   const [fileName, setFileName] = useState<string>('Untitled file')
   const [saved, setSaved] = useState<boolean>(false)
 
-  const handleDocChange = useCallback((newDoc) => {
-    if (newDoc !== doc) {
+  const handleDocChange = useCallback((newDoc: string) => {
+    if (currentSavedDoc !== newDoc) {
       setSaved(false)
       setDoc(newDoc)
     }
-  }, [])
+  }, [currentSavedDoc])
 
   // Document saved
   useEffect(() => {
     ;(window as unknown as ipcWindow).ipcRenderer.receive(
       'document-saved',
       (filePath: string) => {
-        setSaved(true)
+        setCurrentSavedDoc(doc)
         setFileName(filePath)
+        setSaved(true)
       }
     )
   }, [])
@@ -33,9 +35,10 @@ const App: React.FC = () => {
     ;(window as unknown as ipcWindow).ipcRenderer.receive(
       'document-opened',
       (filePath: string, content: string) => {
-        setSaved(true)
         setFileName(filePath)
         setDoc(content)
+        setCurrentSavedDoc(content)
+        setSaved(true)
       }
     )
   }, [])
