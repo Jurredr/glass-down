@@ -4,6 +4,7 @@ import Preview from './component/preview'
 import './app.css'
 import FileName from './component/file-name'
 import type ipcWindow from '../../../types/IpcTypes'
+import type { EditorView } from '@codemirror/view'
 
 const App: React.FC = () => {
   const [doc, setDoc] = useState<string>('# Hello, World!\n')
@@ -27,13 +28,25 @@ const App: React.FC = () => {
     }
   }, [currentSavedDoc, doc])
 
-  const handleDocChange = (newDoc: string) => {
+  const handleDocChange = (newDoc: string, editorView: EditorView | undefined) => {
     if (currentSavedDoc !== newDoc) {
       setDoc(newDoc)
       ;(window as unknown as ipcWindow).ipcRenderer.send(
         'document-updated',
         newDoc
       )
+
+      if (editorView !== undefined) {
+        const transaction = {
+          changes: {
+            from: 0,
+            to: editorView?.state.doc.length,
+            insert: newDoc
+          }
+        }
+        const update = editorView.state.update(transaction)
+        editorView?.update([update])
+      }
     }
   }
 

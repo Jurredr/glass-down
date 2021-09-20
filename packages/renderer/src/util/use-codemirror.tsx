@@ -78,7 +78,7 @@ const useCodeMirror = <T extends Element>(
         syntaxHighlighting,
         EditorView.lineWrapping,
         EditorView.updateListener.of((update) => {
-          if (update.changes) {
+          if (update.docChanged) {
             onChange && onChange(update.state)
           }
         })
@@ -89,6 +89,7 @@ const useCodeMirror = <T extends Element>(
       state: startState,
       parent: refContainer.current
     })
+
     setEditorView(view)
   }, [refContainer])
 

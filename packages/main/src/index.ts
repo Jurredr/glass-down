@@ -1,4 +1,4 @@
-import type { MenuItemConstructorOptions } from 'electron';
+import type { MenuItemConstructorOptions } from 'electron'
 import { ipcMain } from 'electron'
 import { dialog } from 'electron'
 import { app, BrowserWindow, Menu, nativeImage, shell } from 'electron'
@@ -58,11 +58,11 @@ const createWindow = async () => {
             submenu: [
               { role: 'about' },
               { type: 'separator' },
-              {
-                label: 'Preferences',
-                accelerator: 'CmdOrCtrl+,',
-                click: () => console.log('test')
-              },
+              // {
+              //   label: 'Preferences',
+              //   accelerator: 'CmdOrCtrl+,',
+              //   click: () => console.log('test')
+              // },
               { type: 'separator' },
               { role: 'services' },
               { type: 'separator' },
@@ -96,21 +96,27 @@ const createWindow = async () => {
           accelerator: 'CmdOrCtrl+O',
           click: () => {
             if (mainWindow) {
-              dialog.showOpenDialog(mainWindow, {}).then(({ filePaths }) => {
-                const filePath = filePaths[0]
-                fs.readFile(filePath, 'utf8', (error, content) => {
-                  if (error) {
-                    console.log(error)
-                  } else {
-                    currentSaveDir = filePath
-                    mainWindow?.webContents.send(
-                      'document-opened',
-                      filePath,
-                      content
-                    )
-                  }
+              dialog
+                .showOpenDialog(mainWindow, {})
+                .then(({ filePaths }) => {
+                  const filePath = filePaths[0]
+                  if (filePath === currentSaveDir) return
+                  fs.readFile(filePath, 'utf8', (error, content) => {
+                    if (error) {
+                      console.log(error)
+                    } else {
+                      currentSaveDir = filePath
+                      mainWindow?.webContents.send(
+                        'document-opened',
+                        filePath,
+                        content
+                      )
+                    }
+                  })
                 })
-              })
+                .catch(() => {
+                  console.log('File opening cancelled')
+                })
             }
           }
         },
