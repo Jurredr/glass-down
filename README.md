@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  [⚡️] Modern & Fast transparant Markdown editor. (ReactJS + Electron)
+  [⚡️] Modern & Fast transparent Markdown editor. (ReactJS + Electron)
 </p>
 
 # Preview
@@ -18,5 +18,5 @@ Feature | Description
 ----|---
 💻 **Editor** | User-friendly Markdown formatting and code completion
 📺 **Preview** | Fast real-time live rendered preview
-📝 **File management** | Quickly load and save .md and .txt files
+📝 **File management** | Quickly load and save .md and files
 ⚙️ **Multiple OS** | Glassdown works on Windows, Linux, and MacOS
